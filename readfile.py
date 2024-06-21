@@ -12,10 +12,14 @@ def split_text(texts):
     return seperated
 
 def get_class_name(seperated_text):
-    class_name = ""
+    index = 0
     for text in seperated_text:
-        if(text is 'public'):
-            class_name += text
+        if text == 'class':
+            index+=1
+
+    class_name = seperated_text[index+1]
+    return class_name
+
             
 
 
@@ -23,7 +27,8 @@ def get_class_name(seperated_text):
 def main():
     text = read_entire_file("testing.java")
     # print(type(text))
-    split_text(text)
+    seperated = split_text(text)
+    print(get_class_name(seperated))
 
 if __name__ == "__main__":
     main()
