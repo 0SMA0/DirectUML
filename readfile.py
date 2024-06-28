@@ -1,27 +1,33 @@
 def read_entire_file(filename):
     lines = ""
-    file = open(filename,'r')
+    file = open(filename, 'r')
     text = file.readlines()
     for line in text:
         lines += line
     file.close
+    print(lines)
     return lines
 
+
 def split_text(texts):
+    # seperated text contains imports
     seperated = texts.split()
-    return seperated
+
+    # find the index where it has the first public and then copy everything from there by slicing everything before it
+    index = seperated.index('public')
+    no_import_text = seperated[index:]
+
+    return no_import_text
 
 def get_class_name(seperated_text):
-    index = 0
+    index = 1
+
     for text in seperated_text:
         if text == 'class':
-            index+=1
+            index += 1
 
-    class_name = seperated_text[index+1]
+    class_name = seperated_text[index]
     return class_name
-
-            
-
 
 
 def main():
@@ -29,6 +35,7 @@ def main():
     # print(type(text))
     seperated = split_text(text)
     print(get_class_name(seperated))
+
 
 if __name__ == "__main__":
     main()
