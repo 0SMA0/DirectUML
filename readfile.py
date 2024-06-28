@@ -8,7 +8,6 @@ def read_entire_file(filename):
     print(lines)
     return lines
 
-
 def split_text(texts):
     # seperated text contains imports
     seperated = texts.split()
@@ -29,12 +28,20 @@ def get_class_name(seperated_text):
     class_name = seperated_text[index]
     return class_name
 
+def get_fields(seperated_text):
+    for word in seperated_text:
+        for char in word:
+            if char == ";":
+                print(word)
+    print("done")            
+    return None
 
 def main():
     text = read_entire_file("testing.java")
     # print(type(text))
     seperated = split_text(text)
     print(get_class_name(seperated))
+    get_fields(seperated)
 
 
 if __name__ == "__main__":
