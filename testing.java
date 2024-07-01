@@ -4,6 +4,7 @@ public class testing {
 
     private int error;
     private ArrayList<Integer> something;
+    public String hehe;
 
     
 
