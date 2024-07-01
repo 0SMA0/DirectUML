@@ -1,5 +1,6 @@
 import re
 
+
 def read_entire_file(filename):
     lines = ""
     file = open(filename, 'r')
@@ -8,6 +9,7 @@ def read_entire_file(filename):
         lines += line
     file.close
     return lines
+
 
 def read_entire_file_list(filename):
     each_line = []
@@ -27,7 +29,8 @@ def split_text_list(text):
         striped_line = line.strip()
         updated_list.append(striped_line)
     return updated_list
-    
+
+
 def split_text(texts):
     # seperated text contains imports
     seperated = texts.split()
@@ -37,6 +40,7 @@ def split_text(texts):
     no_import_text = seperated[index:]
 
     return no_import_text
+
 
 def get_class_name(seperated_text):
     index = 1
@@ -48,29 +52,29 @@ def get_class_name(seperated_text):
     class_name = seperated_text[index]
     return class_name
 
+
 def get_fields(list_text):
+    private_fields_list = []
+    public_fields_list = []
     enumerated_list = enumerate(list_text)
     for words in enumerated_list:
         public_fields = re.search("^public.*;$", str(words[1]))
         private_fields = re.search("^private.*;$", str(words[1]))
         if public_fields:
-            print("Public Found")
-            print(words[1])
+            public_fields_list.append(words[1])
         elif private_fields:
-            print("Private Found")
-            print(words[1])
-        
+            private_fields_list.append(words[1])
+    return public_fields_list, private_fields_list
+
 
 def main():
     file = "testing.java"
     text = read_entire_file(file)
     text_list = read_entire_file_list(file)
-    # print(type(text))
-    seperated = split_text(text)
+    seperated_text = split_text(text)
+    print("class name: ", get_class_name(seperated_text))
     seperated_list = split_text_list(text_list)
-    # print(seperated_list)
-    # print(get_class_name(seperated))
-    get_fields(seperated_list)
+    print("fields: ", get_fields(seperated_list))
 
 
 if __name__ == "__main__":
