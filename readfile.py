@@ -66,6 +66,20 @@ def get_fields(list_text):
             private_fields_list.append(words[1])
     return public_fields_list, private_fields_list
 
+def get_methods(list_text):
+    private_methods_list = []
+    public_methods_list = []
+    enumerated_list = enumerate(list_text)
+    for words in enumerated_list:
+        # later in the future will need to change this so that it can look at other formats
+        public_methods = re.search("^public.*{$", str(words[1]))
+        private_fields = re.search("^private.*{$", str(words[1]))
+        if public_methods:
+            public_methods_list.append(words[1])
+        elif private_fields:
+            private_methods_list.append(words[1])
+    return public_methods_list, private_methods_list
+
 
 def main():
     file = "testing.java"
@@ -75,6 +89,7 @@ def main():
     print("class name: ", get_class_name(seperated_text))
     seperated_list = split_text_list(text_list)
     print("fields: ", get_fields(seperated_list))
+    print("methods: ", get_methods(seperated_list))
 
 
 if __name__ == "__main__":
