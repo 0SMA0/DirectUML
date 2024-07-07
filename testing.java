@@ -32,7 +32,7 @@ public class testing {
 
 
 
-    public ArrayList<Integer> getSomething() {
+    private ArrayList<Integer> getSomething() {
         return something;
     }
 

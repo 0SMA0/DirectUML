@@ -14,7 +14,6 @@ def read_entire_file(filename):
     Raises:
         FileNotFoundError: If the specified file does not exist.
         IOError: If there is an error while reading the file.
-
     """
     lines = ""
     file = open(filename, 'r')
@@ -53,7 +52,6 @@ def split_text_list(text):
 
     Returns:
         list: A new list with stripped lines.
-
     """
     updated_list = []
     no_imports = text[1:]
@@ -85,6 +83,15 @@ def split_text(texts):
 
 
 def get_class_name(seperated_text):
+    """
+    Retrieves the name of the class from a list of separated text.
+
+    Args:
+        seperated_text (list): A list of strings representing the separated text.
+
+    Returns:
+        str: The name of the class.
+    """
     index = 1
 
     for text in seperated_text:
@@ -106,17 +113,22 @@ def get_fields(list_text):
         tuple: A tuple containing two lists - public_fields_list and private_fields_list.
             - public_fields_list (list): A list of public field declarations.
             - private_fields_list (list): A list of private field declarations.
+            - protected_fields_list (list): A list of private field declarations.
     """
     private_fields_list = []
     public_fields_list = []
+    protected_fields_list = []
     enumerated_list = enumerate(list_text)
     for words in enumerated_list:
         public_fields = re.search("^public.*;$", str(words[1]))
+        protected_fields = re.search("^protected.*;$", str(words[1]))
         private_fields = re.search("^private.*;$", str(words[1]))
         if public_fields:
             public_fields_list.append(words[1])
         elif private_fields:
             private_fields_list.append(words[1])
+        elif protected_fields:
+            protected_fields_list.append(words[1])
     return public_fields_list, private_fields_list
 
 
@@ -134,27 +146,41 @@ def get_methods(list_text):
     """
     private_methods_list = []
     public_methods_list = []
+    protected_methods_list = []
     enumerated_list = enumerate(list_text)
     for words in enumerated_list:
+        # need to get rid of the class
         # later in the future will need to change this so that it can look at other formats
         public_methods = re.search("^public.*{$", str(words[1]))
-        private_fields = re.search("^private.*{$", str(words[1]))
-        if public_methods:
+        private_methods = re.search("^private.*{$", str(words[1]))
+        protected_methods = re.search("^protected.*{$", str(words[1]))
+        if public_methods and "class" is not  words[1]:
             public_methods_list.append(words[1])
-        elif private_fields:
+        elif private_methods:
             private_methods_list.append(words[1])
-    return public_methods_list, private_methods_list
+        elif protected_methods:
+            protected_methods_list.append(words[1])
+    return public_methods_list, private_methods_list, protected_methods_list
 
+def seperate_method_parts(methods_list):
+    seperated_methods = []
+    for methods in methods_list:
+        for method in methods:
+            seperated_methods.append(method.split(" "))
+    print(seperated_methods)
 
 def main():
     file = "testing.java"
     text = read_entire_file(file)
     text_list = read_entire_file_list(file)
     seperated_text = split_text(text)
-    print("class name: ", get_class_name(seperated_text))
+    # print("class name: ", get_class_name(seperated_text))
     seperated_list = split_text_list(text_list)
-    print("fields: ", get_fields(seperated_list))
-    print("methods: ", get_methods(seperated_list))
+    # print("fields: ", get_fields(seperated_list))
+    # print("methods: ", get_methods(seperated_list))
+
+    methods = get_methods(seperated_list)
+    seperate_method_parts(methods)
 
 
 if __name__ == "__main__":
