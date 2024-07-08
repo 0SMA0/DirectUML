@@ -147,14 +147,17 @@ def get_methods(list_text):
     private_methods_list = []
     public_methods_list = []
     protected_methods_list = []
-    enumerated_list = enumerate(list_text)
-    for words in enumerated_list:
+    list = enumerate(list_text)
+    for words in list:
         # need to get rid of the class
         # later in the future will need to change this so that it can look at other formats
         public_methods = re.search("^public.*{$", str(words[1]))
         private_methods = re.search("^private.*{$", str(words[1]))
         protected_methods = re.search("^protected.*{$", str(words[1]))
-        if public_methods and "class" is not  words[1]:
+        found_class = re.search("^public class.*{$",str(words[1]))
+        if found_class:
+            continue
+        elif public_methods:
             public_methods_list.append(words[1])
         elif private_methods:
             private_methods_list.append(words[1])
@@ -167,7 +170,7 @@ def seperate_method_parts(methods_list):
     for methods in methods_list:
         for method in methods:
             seperated_methods.append(method.split(" "))
-    print(seperated_methods)
+    return seperated_methods
 
 def main():
     file = "testing.java"
@@ -176,12 +179,12 @@ def main():
     seperated_text = split_text(text)
     # print("class name: ", get_class_name(seperated_text))
     seperated_list = split_text_list(text_list)
+
     # print("fields: ", get_fields(seperated_list))
-    # print("methods: ", get_methods(seperated_list))
-
     methods = get_methods(seperated_list)
-    seperate_method_parts(methods)
-
+    # print("methods: ", methods)
+    print(seperate_method_parts(methods))
+    
 
 if __name__ == "__main__":
     main()

@@ -1,8 +1,8 @@
-import readfile
+import readfile_java
 
-text_list = readfile.read_entire_file_list("testing.java")
-seperated_text_list = readfile.split_text_list(text_list)
-methods = readfile.get_methods(seperated_text_list)
+text_list = readfile_java.read_entire_file_list("testing.java")
+seperated_text_list = readfile_java.split_text_list(text_list)
+methods = readfile_java.get_methods(seperated_text_list)
 
 class Field:
     def __init__(self,visibility, isFinal, isStatic, returnType, name):
