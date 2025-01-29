@@ -67,23 +67,24 @@ class ConcreteJavaParser(AbstractParserJava):
         pattern = rf"{access_modifier}\s+\w+\s+\w+\s*;"
         adt_field_pattern = rf"{access_modifier}\s+\w+<\w+(,\s*\w+)*>\s+\w+\s*;"
         adt_initialization_pattern = rf"{access_modifier}\s+\w+<\w+(,\s*\w+)*>\s+\w+\s*=\s*new\s+\w+<.*?>\s*\(\s*\)\s*;"
-        match = re.search(pattern, line) or re.search(adt_field_pattern, line) or re.search(adt_initialization_pattern, line)
-        return match.group(0).strip() if match else None
-    
-    
-    
+        match = re.search(adt_initialization_pattern, line) or re.search(adt_field_pattern, line) or re.search(pattern, line)
+        return match.group(0).strip().split() if match else None
 
 
 if __name__ == "__main__":
     javafactory = JavaParserFactory()
     javaparser = javafactory.create_parser()
     dict = javaparser.parse("Dog.java")
+    
     class_name = dict["class_name"]
     public_fields = dict["public_fields"]
     private_fields = dict["private_fields"]
     protected_fields = dict["protected_fields"]
     states = [public_fields, private_fields, protected_fields]
+    print(states)
     methods = None
+
     example_uml = ClassUML(class_name, states, methods)
-    print(example_uml.get_states())
-    
+    print(example_uml.get_public_states_name_lst())
+    print(example_uml.get_private_states_name_lst())
+    print(example_uml.get_protected_states_name_lst())

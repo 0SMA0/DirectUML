@@ -1,10 +1,11 @@
 import java.util.ArrayList;
 
 public class Dog {   
-    public String body;
+    public String    body;
     private String sound;
     private String sound2;
-    private ArrayList<String> lst = new ArrayList<>();
+    private ArrayList<String>     lst = new ArrayList<>();
+    public String leg;
     String thing;
 
     public Dog(String sound) {
