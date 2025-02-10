@@ -1,3 +1,4 @@
+from visibility import Visibility
 class ClassUML:
 
     # Will need to take care of how to know that things are connected
@@ -30,35 +31,50 @@ class ClassUML:
         return state_names_lst
 
     def get_public_states_name_lst(self):
+        names = [Visibility.PUBLIC.value]
         public_states_lst = self.get_public_states()
-        names = self.iterate_state_names(public_states_lst)
+        names.append(self.iterate_state_names(public_states_lst))
         return names if len(names)!=0 else None
 
     def get_private_states_name_lst(self):
+        names = [Visibility.PRIVATE.value]
         private_states_lst = self.get_private_states()
-        names = self.iterate_state_names(private_states_lst)
+        names.append(self.iterate_state_names(private_states_lst))
         return names if len(names)!=0 else None
 
     def get_protected_states_name_lst(self):
+        names = [Visibility.PUBLIC.value]
         protected_states_lst = self.get_protected_states()
         names = self.iterate_state_names(protected_states_lst)
         return names if len(names)!=0 else None
 
-    def get_states_return_type_lst(self):
+    def iterate_state_return_types(self, lst):
         return_type_lst = []
-        for state in self.__states:
-            for thing in state:
-                return_type_lst.append(thing[1])
+        for state in lst:
+            return_type_lst.append(state[1])
         return return_type_lst
 
-    def get_methods(self):
-        return self.__methods
+    def get_public_return_types(self):
+        public_states_lst = self.get_public_states()
+        return_types = [Visibility.PUBLIC.value]
+        return_types.append(self.iterate_state_return_types(public_states_lst))
+        return return_types if len(return_types)!=0 else None
+    
+    def get_private_return_type(self):
+        private_states_lst = self.get_private_states()
+        return_types = [Visibility.PRIVATE.value]
+        return_types.append(self.iterate_state_return_types(private_states_lst))
+        return return_types if len(return_types)!=0 else None
+    
+    def get_protected_return_types(self):
+        protected_states_lst = self.get_protected_states()
+        return_types = [Visibility.PROTECTED.value]
+        return_types.append(self.iterate_state_return_types(protected_states_lst))
+        return return_types if len(return_types)!=0 else None
+    
+# print(example_uml.get_public_states_name_lst())
+# print(example_uml.get_public_return_types())
+        # ['body', 'leg']
+        # ['String', 'String']
 
-    def set_name(self, new_name):
-        self.__name = new_name
-
-    def set_states(self, new_states):
-        self._states = new_states
-
-    def set_methods(self, new_methods):
-        self.__methods = new_methods
+# Because we parsed it with the thought of the visablity, we can just add it as public
